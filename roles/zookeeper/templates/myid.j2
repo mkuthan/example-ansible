@@ -1,0 +1,5 @@
+{% for host in groups['zookeeper'] %}
+  {%- if host == ansible_fqdn -%}
+{{ hostvars[host].zookeeper_id }}
+  {%- endif -%}
+{% endfor %}

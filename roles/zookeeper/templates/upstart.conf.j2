@@ -1,0 +1,16 @@
+description "ZooKeeper"
+
+limit nofile 32768 32768
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+respawn limit 2 5
+
+setuid zookeeper
+setgid zookeeper
+
+script
+    exec /opt/zookeeper/bin/zkServer.sh start-foreground
+end script
