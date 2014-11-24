@@ -1,11 +1,11 @@
 VAGRANTFILE_API_VERSION = "2"
 
 cluster = {
-    "master" => { :ip => "192.168.50.10",  :cpus => 1, :mem => 1024 },
-    "slave1" => { :ip => "192.168.50.20",  :cpus => 1, :mem => 1024 },
-    "slave2" => { :ip => "192.168.50.30",  :cpus => 1, :mem => 1024 },
+    "node1" => { :ip => "192.168.50.10",  :cpus => 1, :mem => 1024 },
+    "node2" => { :ip => "192.168.50.20",  :cpus => 1, :mem => 1024 },
+    "node3" => { :ip => "192.168.50.30",  :cpus => 1, :mem => 1024 },
+    "node4" => { :ip => "192.168.50.40",  :cpus => 1, :mem => 1024 },
 }
-
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -28,11 +28,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       if index == cluster.size - 1
         config.vm.provision :ansible do |ansible|
-          ansible.playbook = "playbook.yml"
-          ansible.inventory_path = "vagrant_hosts"
+          ansible.playbook = "site.yml"
           ansible.verbose = ""
           ansible.limit = "all"
           ansible.sudo = true
+          ansible.groups = {
+            "zookeeper" => ["node1", "node2", "node3"],
+            "kafka" => ["node1", "node2", "node3"]
+          }
         end
       end
 
