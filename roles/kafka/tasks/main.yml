@@ -1,54 +1,39 @@
 ---
-- name: Install OpenJDK
-  apt: name=openjdk-7-jre-headless state=present
-
 - name: setup group
-  group: name={{kafka_group}} system=yes
+  group: name=kafka system=yes
 
-- name: Setup user
-  user: name={{kafka_user}} system=yes group={{kafka_group}}
-
-- name: Fetch kafka binary package
-  get_url: dest=/root url="{{apache_mirror}}/kafka/{{kafka_version}}/kafka_2.9.2-{{kafka_version}}.tgz"
-
-- name: Uncompress the kafka tar
-  unarchive: copy=no creates=/opt/kafka_2.9.2-{{kafka_version}} dest=/opt src=/root/kafka_2.9.2-{{kafka_version}}.tgz
-
-- name: Link /opt/kafka to the right version
-  file: path=/opt/kafka state=link src=/opt/kafka_2.9.2-{{kafka_version}}
+- name: setup user
+  user: name=kafka system=yes group=kafka
 
 - name: create upstart config
-  copy: dest={{kafka_upstart_conf}} owner=root group=root mode=644 src=kafka.conf
+  template: dest=/etc/init/kafka.conf src=upstart.conf.j2
   notify:
     - restart kafka
-  when: ansible_distribution_release == 'trusty'
 
-- name: create systemd config
-  copy: dest={{kafka_systemd_service}} owner=root group=root mode=644 src=kafka.service
-  notify:
-    - restart kafka
-  when: ansible_distribution_release != 'trusty'
+- name: fetch binary package
+  get_url: dest=/root/kafka_{{kafka_scala_version}}-{{kafka_version}}.tgz url="http://apache.mirrors.tds.net/kafka/{{kafka_version}}/kafka_{{kafka_scala_version}}-{{kafka_version}}.tgz"
 
-- name: Create data_dir
-  file: path={{kafka_data_dir}} state=directory owner={{kafka_user}} group={{kafka_group}} mode=755
+- name: uncompress binary package
+  unarchive: copy=no creates=/opt/kafka_{{kafka_scala_version}}-{{kafka_version}} dest=/opt src=/root/kafka_{{kafka_scala_version}}-{{kafka_version}}.tgz
 
-- name: Remove lost+found in the datadir
-  file: path="{{kafka_data_dir}}/lost+found" state=absent
+- name: create symlink to installation directory
+  file: path=/opt/kafka state=link src=/opt/kafka_{{kafka_scala_version}}-{{kafka_version}}
 
-- name: Create log_dir
-  file: path={{kafka_log_dir}} state=directory owner={{kafka_user}} group={{kafka_group}} mode=755
-
-- name: link conf_dir to /opt/kafka/config
+- name: create symlink to conf directory
   file: path={{kafka_conf_dir}} state=link src=/opt/kafka/config
 
-# Setup log4j.properties
-- name: create log4j.properties
-  template: dest="{{kafka_conf_dir}}/log4j.properties" owner={{kafka_user}} group={{kafka_group}} mode=644 src=log4j.properties.j2
+- name: create data directory
+  file: path={{kafka_data_dir}} state=directory owner=kafka group=kafka mode=755
+
+- name: create log directory
+  file: path={{kafka_log_dir}} state=directory owner=kafka group=kafka mode=755
+
+- name: Setup server.properties
+  template: dest="{{kafka_conf_dir}}/server.properties" src=server.properties.j2 force="yes"
   notify:
     - restart kafka
 
-# Setup server.properties
-- name: create server.properties
-  template: dest="{{kafka_conf_dir}}/server.properties" owner={{kafka_user}} group={{kafka_group}} mode=640 src=server.properties.j2
+- name: Setup log4j
+  template: dest="{{kafka_conf_dir}}/log4j.properties" src=log4j.properties.j2 force="yes"
   notify:
     - restart kafka

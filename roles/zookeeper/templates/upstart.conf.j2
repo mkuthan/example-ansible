@@ -11,6 +11,8 @@ respawn limit 2 5
 setuid zookeeper
 setgid zookeeper
 
+env JVMFLAGS="-Xmx128M -Xms128M"
+
 script
-    exec /opt/zookeeper/bin/zkServer.sh start-foreground
+  exec /opt/zookeeper/bin/zkServer.sh start-foreground
 end script

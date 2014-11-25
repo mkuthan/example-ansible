@@ -7,3 +7,7 @@
 - hosts: zookeeper
   roles:
   - role: zookeeper
+
+- hosts: kafka
+  roles:
+  - role: kafka

@@ -1,4 +1,3 @@
 ---
-apache_mirror: http://apache.mirrors.tds.net
-kafka_id: 0
-kafka_version: 0.8.1.1
+kafka_version: 0.8.2-beta
+kafka_scala_version: 2.11

@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.sudo = true
           ansible.groups = {
             "zookeeper" => ["node1", "node2", "node3"],
-            "kafka" => ["node1", "node2", "node3"]
+            "kafka" => ["node1", "node2", "node3"],
           }
         end
       end

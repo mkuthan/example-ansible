@@ -35,15 +35,16 @@
     - restart zookeeper
     - wait for zookeeper port
 
+- name: Setup log4j
+  template: dest="{{zookeeper_conf_dir}}/log4j.properties" src=log4j.properties.j2 force="yes"
+  notify:
+    - restart zookeeper
+    - wait for zookeeper port
+
 - name: Setup myid
   template: dest="{{zookeeper_data_dir}}/myid" src=myid.j2 force="yes"
   notify:
     - restart zookeeper
     - wait for zookeeper port
 
-- name: Setup log4j
-  template: dest="{{zookeeper_conf_dir}}/log4j.properties" src=log4j.properties.j2 force="yes"
-  notify:
-    - restart zookeeper
-    - wait for zookeeper port
 
