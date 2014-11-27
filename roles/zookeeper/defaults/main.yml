@@ -1,3 +1,5 @@
 ---
 zookeeper_version: 3.4.6
 zookeeper_client_port: 2181
+zookeeper_jmx_port: 9998
+zookeeper_jvm_opts: -Xmx256M -Xms256M

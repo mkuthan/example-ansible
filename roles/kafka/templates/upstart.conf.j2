@@ -11,7 +11,8 @@ respawn limit 2 5
 setuid kafka
 setgid kafka
 
-env KAFKA_HEAP_OPTS="-Xmx256M -Xms256M"
+env KAFKA_HEAP_OPTS="{{ kafka_jvm_opts }}"
+env JMX_PORT="{{ kafka_jmx_port }}"
 
 script
   exec /opt/kafka/bin/kafka-server-start.sh /etc/kafka/server.properties

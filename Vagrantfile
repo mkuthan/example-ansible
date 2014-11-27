@@ -32,6 +32,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.verbose = ""
           ansible.limit = "all"
           ansible.sudo = true
+          ansible.extra_vars = {
+              default_iface: "eth1"
+          }
           ansible.groups = {
             "zookeeper" => ["node1", "node2", "node3"],
             "kafka" => ["node1", "node2", "node3"],

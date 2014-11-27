@@ -11,7 +11,7 @@ respawn limit 2 5
 setuid zookeeper
 setgid zookeeper
 
-env JVMFLAGS="-Xmx128M -Xms128M"
+env JVMFLAGS="{{ zookeeper_jvm_opts }} -Dcom.sun.management.jmxremote.port={{ zookeeper_jmx_port }} -Dcom.sun.management.jmxremote.authenticate=false"
 
 script
   exec /opt/zookeeper/bin/zkServer.sh start-foreground
