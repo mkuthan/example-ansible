@@ -1,0 +1,9 @@
+[program:{{ supervisor_program }}]
+command={{ supervisor_command }}
+autostart=true
+autorestart=true
+startretries={{ supervisor_restart_retries }}
+stderr_logfile={{ supervisor_log_dir }}/{{ supervisor_program }}.err.log
+stdout_logfile={{ supervisor_log_dir }}/{{ supervisor_program }}.out.log
+user={{ supervisor_user }}
+environment={{ supervisor_environment }}

@@ -1,9 +1,20 @@
 ---
 dependencies:
+
   - { role: oracle-java, oracle_java_version: 8 }
+
   - { role: logrotate,
       logrotate_name: kafka,
-      logrotate_user: "{{ kafka_user}}",
-      logrotate_group: "{{ kafka_group }}",
+      logrotate_user: kafka,
+      logrotate_group: kafka,
       logrotate_log_pattern: "{{ kafka_log_dir }}/*.log"
+    }
+
+  - { role: supervisor,
+      supervisor_program: kafka,
+      supervisor_command: /opt/kafka/bin/kafka-server-start.sh /etc/kafka/server.properties,
+      supervisor_log_dir: "{{ kafka_log_dir }}",
+      supervisor_user: kafka,
+      supervisor_environment: "KAFKA_HEAP_OPTS=\"{{ kafka_jvm_opts }}\",
+        JMX_PORT=\"{{ kafka_jmx_port }}\""
     }

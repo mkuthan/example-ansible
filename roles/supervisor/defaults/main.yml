@@ -1,0 +1,5 @@
+---
+supervisor_http_port: 9001
+supervisor_http_username: supervisor
+supervisor_http_password: supervisor
+supervisor_restart_retries: 5

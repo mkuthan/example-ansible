@@ -1,3 +1,7 @@
 ---
 - name: create hosts file
   template: src=hosts.j2 dest=/etc/hosts
+
+- name: install base packages
+  apt: name={{ item }} update_cache=yes
+  with_items: common_packages

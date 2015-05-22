@@ -1,0 +1,9 @@
+---
+- name: install
+  apt: name=supervisor update_cache=yes
+
+- name: create inet_http_server config
+  template: dest=/etc/supervisor/conf.d/inet_http_server.conf src=inet_http_server.j2
+
+- name: create {{ supervisor_program }} config
+  template: dest=/etc/supervisor/conf.d/{{ supervisor_program }}.conf src=supervisor.j2

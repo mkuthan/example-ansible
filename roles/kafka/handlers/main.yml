@@ -1,3 +1,6 @@
 ---
 - name: restart kafka
-  service: name=kafka state=restarted enabled=yes
+  supervisorctl: name=kafka state=restarted
+
+- name: wait for kafka port
+  wait_for: host={{ ansible_fqdn }} port={{ kafka_port }} state=started

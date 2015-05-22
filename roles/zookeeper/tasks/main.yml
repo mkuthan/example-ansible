@@ -1,24 +1,23 @@
 ---
 - name: setup group
-  group: name={{ zookeeper_group }} system=yes
+  group: name=zookeeper system=yes
 
 - name: setup user
-  user: name={{ zookeeper_user }} system=yes group={{ zookeeper_group }}
+  user: name=zookeeper group=zookeeper system=yes
 
-- name: create upstart config
-  template: dest=/etc/init/zookeeper.conf src=upstart.conf.j2
-  notify:
-    - restart zookeeper
-    - wait for zookeeper port
+- name: fetch binary package
+  get_url:
+    url: http://apache.mirrors.tds.net/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz
+    dest: /opt/zookeeper-{{ zookeeper_version }}.tar.gz
 
-- include: ../../../tasks/deploy.yml
-  vars:
-    url: http://apache.mirrors.tds.net/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
-    package: zookeeper-{{zookeeper_version}}.tar.gz
-    dest: "{{ zookeeper_install_dir }}"
+- name: install binary package
+  unarchive: src=/opt/zookeeper-{{ zookeeper_version }}.tar.gz creates=/opt/zookeeper-{{ zookeeper_version }} dest=/opt copy=no
+
+- name: create symlink to installation directory
+  file: path=/opt/zookeeper src=/opt/zookeeper-{{ zookeeper_version }} state=link
 
 - name: create symlink to conf directory
-  file: path={{zookeeper_conf_dir}} state=link src=/opt/zookeeper/conf
+  file: path={{zookeeper_conf_dir}} src=/opt/zookeeper/conf state=link
 
 - name: create data directory
   file: path={{zookeeper_data_dir}} state=directory owner=zookeeper group=zookeeper mode=755
@@ -26,20 +25,20 @@
 - name: create log directory
   file: path={{zookeeper_log_dir}} state=directory owner=zookeeper group=zookeeper mode=755
 
-- name: Setup zoo.cfg
-  template: dest="{{zookeeper_conf_dir}}/zoo.cfg" src=zoo.cfg.j2 force="yes"
+- name: setup zoo.cfg
+  template: dest="{{zookeeper_conf_dir}}/zoo.cfg" src=zoo.cfg.j2
   notify:
     - restart zookeeper
     - wait for zookeeper port
 
-- name: Setup log4j
-  template: dest="{{zookeeper_conf_dir}}/log4j.properties" src=log4j.properties.j2 force="yes"
+- name: setup log4j
+  template: dest="{{zookeeper_conf_dir}}/log4j.properties" src=log4j.properties.j2
   notify:
     - restart zookeeper
     - wait for zookeeper port
 
-- name: Setup myid
-  template: dest="{{zookeeper_data_dir}}/myid" src=myid.j2 force="yes"
+- name: setup myid
+  template: dest="{{zookeeper_data_dir}}/myid" src=myid.j2
   notify:
     - restart zookeeper
     - wait for zookeeper port

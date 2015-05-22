@@ -1,6 +1,6 @@
 ---
 - name: restart zookeeper
-  service: name=zookeeper state=restarted enabled=yes
+  supervisorctl: name=zookeeper state=restarted
 
 - name: wait for zookeeper port
-  wait_for: port={{zookeeper_client_port}} state=started
+  wait_for: host={{ ansible_fqdn }} port={{ zookeeper_client_port }} state=started

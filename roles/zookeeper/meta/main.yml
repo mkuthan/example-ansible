@@ -1,9 +1,22 @@
 ---
 dependencies:
+
   - { role: oracle-java, oracle_java_version: 8 }
+
   - { role: logrotate,
       logrotate_name: zookeeper,
-      logrotate_user: "{{ zookeeper_user}}",
-      logrotate_group: "{{ zookeeper_group }}",
+      logrotate_user: zookeeper,
+      logrotate_group: zookeeper,
       logrotate_log_pattern: "{{ zookeeper_log_dir }}/*.log"
+    }
+
+  - { role: supervisor,
+      supervisor_program: zookeeper,
+      supervisor_command: /opt/zookeeper/bin/zkServer.sh start-foreground,
+      supervisor_log_dir: "{{ zookeeper_log_dir }}",
+      supervisor_user: zookeeper,
+      supervisor_environment: "JVMFLAGS=\"{{ zookeeper_jvm_opts }}
+        -Dcom.sun.management.jmxremote.port={{ zookeeper_jmx_port }}
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false\""
     }

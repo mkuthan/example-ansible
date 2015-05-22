@@ -1,5 +1,4 @@
 ---
-zookeeper_install_dir: /opt/zookeeper
 zookeeper_conf_dir: /etc/zookeeper
 zookeeper_data_dir: /var/zookeeper
 zookeeper_log_dir: /var/log/zookeeper
