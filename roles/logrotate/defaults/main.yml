@@ -1,3 +1,0 @@
----
-logrotate_rotate: daily
-logrotate_count: 7

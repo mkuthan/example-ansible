@@ -3,3 +3,5 @@ supervisor_http_port: 9001
 supervisor_http_username: supervisor
 supervisor_http_password: supervisor
 supervisor_restart_retries: 5
+supervisor_logfile_maxbytes: 10MB
+supervisor_logfile_backups: 10

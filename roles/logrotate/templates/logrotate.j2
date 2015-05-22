@@ -1,8 +1,0 @@
-{{ logrotate_log_pattern }} {
-    copytruncate
-    compress
-    missingok
-    {{ logrotate_rotate }}
-    rotate {{ logrotate_count }}
-    create 0644 {{ logrotate_user }} {{ logrotate_group }}
-}
