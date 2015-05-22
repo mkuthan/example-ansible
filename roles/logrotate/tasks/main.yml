@@ -1,0 +1,4 @@
+- name: create logrotate config
+  template:
+    dest: "/etc/logrotate.d/{{ logrotate_name }}"
+    src: logrotate.j2

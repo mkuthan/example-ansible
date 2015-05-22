@@ -1,9 +1,9 @@
 ---
 - name: setup group
-  group: name=zookeeper system=yes
+  group: name={{ zookeeper_group }} system=yes
 
 - name: setup user
-  user: name=zookeeper system=yes group=zookeeper
+  user: name={{ zookeeper_user }} system=yes group={{ zookeeper_group }}
 
 - name: create upstart config
   template: dest=/etc/init/zookeeper.conf src=upstart.conf.j2
@@ -11,14 +11,11 @@
     - restart zookeeper
     - wait for zookeeper port
 
-- name: fetch binary package
-  get_url: dest=/root/zookeeper-{{zookeeper_version}}.tar.gz url="http://apache.mirrors.tds.net/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz"
-
-- name: uncompress binary package
-  unarchive: copy=no creates=/opt/zookeeper-{{zookeeper_version}} dest=/opt src=/root/zookeeper-{{zookeeper_version}}.tar.gz
-
-- name: create symlink to installation directory
-  file: path=/opt/zookeeper state=link src=/opt/zookeeper-{{zookeeper_version}}
+- include: ../../../tasks/deploy.yml
+  vars:
+    url: http://apache.mirrors.tds.net/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
+    package: zookeeper-{{zookeeper_version}}.tar.gz
+    dest: "{{ zookeeper_install_dir }}"
 
 - name: create symlink to conf directory
   file: path={{zookeeper_conf_dir}} state=link src=/opt/zookeeper/conf

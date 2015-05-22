@@ -1,0 +1,9 @@
+---
+dependencies:
+  - { role: oracle-java, oracle_java_version: 8 }
+  - { role: logrotate,
+      logrotate_name: kafka,
+      logrotate_user: "{{ kafka_user}}",
+      logrotate_group: "{{ kafka_group }}",
+      logrotate_log_pattern: "{{ kafka_log_dir }}/*.log"
+    }

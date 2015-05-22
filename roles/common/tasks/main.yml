@@ -1,8 +1,3 @@
 ---
-
-- name: Create the hosts file
+- name: create hosts file
   template: src=hosts.j2 dest=/etc/hosts
-
-- name: Install OpenJdk
-  apt: name=openjdk-7-jre-headless state=present
-

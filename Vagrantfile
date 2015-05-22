@@ -4,7 +4,6 @@ cluster = {
     "node1" => { :ip => "192.168.50.10",  :cpus => 1, :mem => 1024 },
     "node2" => { :ip => "192.168.50.20",  :cpus => 1, :mem => 1024 },
     "node3" => { :ip => "192.168.50.30",  :cpus => 1, :mem => 1024 },
-    "node4" => { :ip => "192.168.50.40",  :cpus => 1, :mem => 1024 },
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

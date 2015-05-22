@@ -5,3 +5,5 @@ kafka_id: 0
 kafka_port: 9092
 kafka_jmx_port: 9999
 kafka_jvm_opts: -Xmx256M -Xms256M
+kafka_user: kafka
+kafka_group: kafka

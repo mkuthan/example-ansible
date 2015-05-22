@@ -1,0 +1,9 @@
+---
+dependencies:
+  - { role: oracle-java, oracle_java_version: 8 }
+  - { role: logrotate,
+      logrotate_name: zookeeper,
+      logrotate_user: "{{ zookeeper_user}}",
+      logrotate_group: "{{ zookeeper_group }}",
+      logrotate_log_pattern: "{{ zookeeper_log_dir }}/*.log"
+    }
